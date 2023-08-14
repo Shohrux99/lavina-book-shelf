@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Container, Typography, Box } from "@mui/material";
 import BookCard from "../../components/BookCard";
 import axios from "axios";
@@ -36,23 +36,25 @@ const MyShelfPage: React.FC<MyShelfPageProps> = () => {
 
   const signature = md5(`GET/books${userSecret}`).toString();
 
-  const headers = {
-    Key: authData?.key,
-    Sign: signature,
-  };
+  const headers = useMemo(() => {
+    return {
+      Key: authData?.key,
+      Sign: signature,
+    };
+  }, [authData?.key, signature]);
 
-  const fetchShelfBooks = async () => {
+  const fetchShelfBooks = useCallback(async () => {
     try {
       const response = await axios.get("https://no23.lavina.tech/books", { headers });
       setShelfBooks(response.data.data);
     } catch (error) {
       console.error("Failed to fetch shelf books:", error);
     }
-  };
+  }, [headers]);
 
   useEffect(() => {
     fetchShelfBooks();
-  }, []);
+  }, [fetchShelfBooks]);
 
   return (
     <Container style={{ marginTop: "20px" }}>
@@ -64,9 +66,9 @@ const MyShelfPage: React.FC<MyShelfPageProps> = () => {
           shelfBooks?.map((item) => <BookCard key={item.book.isbn} book={item.book} myshelf={true} defaultStatus={item.status} fetchShelfBooks={fetchShelfBooks} />)
         ) : (
           <>
-            <p>Your shelf is empty. <Link to={'/search'}>
-            Add some books!
-            </Link></p>
+            <p>
+              Your shelf is empty. <Link to={"/search"}>Add some books!</Link>
+            </p>
           </>
         )}
       </Box>
