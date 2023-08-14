@@ -16,7 +16,6 @@ const links = [
 ];
 
 const Navigation: React.FC = () => {
-  const auth = localStorage.getItem("auth");
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);

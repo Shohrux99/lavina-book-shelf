@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Container, TextField, Button, Typography } from "@mui/material";
 import axios, { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
 
 interface CustomError {
   message: string;
@@ -21,7 +20,6 @@ const RegistrationPage: React.FC = () => {
     key: "",
     secret: "",
   });
-  const navigate = useNavigate();
 
   const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault();
